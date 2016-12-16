@@ -11,6 +11,8 @@ import Foundation
 open class SimpleNotification<T> :BaseNotificationProtocol{
     public typealias SimpleNotificationHandler = (_ value:T, _ sender:AnyObject?) -> Void
     
+    public private(set) var subscribed: Bool
+    
     fileprivate var
     notificationHandler:SimpleNotificationHandler?, // handler that store code block
     sender: AnyObject?,                             // notification sender(not required)
@@ -23,6 +25,7 @@ open class SimpleNotification<T> :BaseNotificationProtocol{
     public init(name: String, sender: AnyObject? = nil){
         self.name = name
         self.sender = sender
+        self.subscribed = false
     }
     //MARK: public methods
     /**
@@ -50,6 +53,7 @@ open class SimpleNotification<T> :BaseNotificationProtocol{
     open func unSubscribe(){
         notificationHandler = nil
         NotificationCenter.default.removeObserver(self)
+        self.subscribed = false
     }
     
     //MARK: private methods
@@ -60,10 +64,13 @@ open class SimpleNotification<T> :BaseNotificationProtocol{
             name:NSNotification.Name(rawValue: name),
             object: nil
         )
+        self.subscribed = true
     }
     
     @objc func methodOfReceivedNotification(_ notification: Notification){
         if let value = (notification.object as? Wrapper<T>)?.wrappedValue{
+            notificationHandler?(value, sender)
+        } else if let value = notification.object as? T{
             notificationHandler?(value, sender)
         } else {
             var givenTypeString = "nil"
