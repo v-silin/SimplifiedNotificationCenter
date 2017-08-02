@@ -9,7 +9,7 @@
 import Foundation
 /// wrapper around NSNotificationCenter
 open class SimpleNotification<T> :BaseNotificationProtocol{
-    public typealias SimpleNotificationHandler = (_ value:T, _ sender:AnyObject?) -> Void
+    public typealias SimpleNotificationHandler = (_ value:T?, _ sender:AnyObject?) -> Void
     
     public private(set) var subscribed: Bool
     
@@ -73,11 +73,12 @@ open class SimpleNotification<T> :BaseNotificationProtocol{
         } else if let value = notification.object as? T{
             notificationHandler?(value, sender)
         } else {
-            var givenTypeString = "nil"
-            let givenType = type(of: notification.object)
-            givenTypeString = String(describing: givenType)
-            
-            handleError("SimpleNotification TYPE ERROR \n expected type: \(T.self) \n given type:     \(givenTypeString)")
+            notificationHandler?(nil, sender)
+//            var givenTypeString = "nil"
+//            let givenType = type(of: notification.object)
+//            givenTypeString = String(describing: givenType)
+//            
+//            handleError("SimpleNotification TYPE ERROR \n expected type: \(T.self) \n given type:     \(givenTypeString)")
         }
     }
     
