@@ -96,7 +96,7 @@ public protocol BaseNotificationProtocol {
      subscribe to notification with handler or unSubscribe from notifications.
      - parameter handler:  handler(value, sender). If handler == nil, unSubscribe() will be performed
      */
-    func subscribe(_ handler: ((_ value:T, _ sender:AnyObject?) -> Void)?)
+    func subscribe(_ handler: ((_ value:T?, _ sender:AnyObject?) -> Void)?)
     /**
      Posts the notification with the given value to the specified center.
      - parameter object:  The data to be sent with the notification.
