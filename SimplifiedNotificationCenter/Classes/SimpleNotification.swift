@@ -70,15 +70,17 @@ open class SimpleNotification<T> :BaseNotificationProtocol{
     @objc func methodOfReceivedNotification(_ notification: Notification){
         if let value = (notification.object as? Wrapper<T>)?.wrappedValue{
             notificationHandler?(value, sender)
-        } else if let value = notification.object as? T{
+        } else if let value = notification.object as? T {
+            notificationHandler?(value, sender)
+        } else if let value = notification as? T {
             notificationHandler?(value, sender)
         } else {
             notificationHandler?(nil, sender)
-//            var givenTypeString = "nil"
-//            let givenType = type(of: notification.object)
-//            givenTypeString = String(describing: givenType)
-//            
-//            handleError("SimpleNotification TYPE ERROR \n expected type: \(T.self) \n given type:     \(givenTypeString)")
+            //            var givenTypeString = "nil"
+            //            let givenType = type(of: notification.object)
+            //            givenTypeString = String(describing: givenType)
+            //
+            //            handleError("SimpleNotification TYPE ERROR \n expected type: \(T.self) \n given type:     \(givenTypeString)")
         }
     }
     
@@ -126,3 +128,4 @@ class Wrapper<T>:AnyObject {
         wrappedValue = theValue
     }
 }
+
