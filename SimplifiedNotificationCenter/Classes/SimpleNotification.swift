@@ -122,7 +122,7 @@ extension SimpleNotification {
 }
 
 
-class Wrapper<T>:AnyObject {
+class Wrapper<T> {
     var wrappedValue: T
     init(theValue: T) {
         wrappedValue = theValue
